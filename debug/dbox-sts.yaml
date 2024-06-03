@@ -17,12 +17,12 @@ spec:
     spec:
       containers:
       - name: dbox
-        image: adgit/ioperf:2024-05-17.rc2
+        image: alpine
         args:
         - -c
         - "trap : TERM INT; sleep infinity & wait"
         command:
-          - /bin/bash
+          - /bin/sh
         resources:
           requests:
             cpu: 10m
