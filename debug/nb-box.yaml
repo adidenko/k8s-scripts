@@ -1,20 +1,25 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: dbox
+  name: nb-dbox
   labels:
-    app: dbox
+    app: nb-dbox
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: dbox
-  serviceName: dbox
+      app: nb-dbox
+  serviceName: nb-dbox
   template:
     metadata:
       labels:
-        app: dbox
+        app: nb-dbox
     spec:
+      #hostPID: true
+      #hostIPC: true
+      #hostNetwork: true
+      #nodeSelector:
+      #  kubernetes.io/hostname: gke-infra-mgmt-4a56a4-t2a-standard-4-864584c5-ccmr
       containers:
       - name: dbox
         image: adgit/debug:20240617-v2
@@ -30,7 +35,15 @@ spec:
           limits:
             cpu: 1000m
             memory: 1Gi
+        securityContext:
+          privileged: true
       dnsConfig:
         options:
         - name: ndots
           value: "1"
+      tolerations:
+      - effect: NoSchedule
+        key: kubernetes.io/arch
+        operator: Equal
+        value: arm64
+
