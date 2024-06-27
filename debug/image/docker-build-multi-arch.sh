@@ -1,7 +1,7 @@
 #!/bin/bash
 
 IMAGE="adgit/debug"
-TAG="20240617-v2"
+TAG="20240618-v1"
 
 docker buildx build \
   --no-cache \

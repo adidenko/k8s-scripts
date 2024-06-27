@@ -18,7 +18,7 @@ spec:
       hostNetwork: true
       containers:
       - name: dbox
-        image: adgit/debug:20240617-v2
+        image: adgit/debug:20240618-v1
         args:
         - -c
         - "trap : TERM INT; sleep infinity & wait"
