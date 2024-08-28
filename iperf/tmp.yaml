@@ -1,0 +1,26 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    app: iperf-client
+  name: iperf-client
+spec:
+  parallelism: 1
+  backoffLimit: 1
+  template:
+    metadata:
+      labels:
+        app: iperf-client
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: iperf-server
+          image: networkstatic/iperf3
+          args:
+            - -c
+            - 100.65.65.1 # ams gwy1
+            #- 109.205.48.72 # poz
+            #- 194.164.87.51 # ams
+            - --time=60
+            - --parallel=16

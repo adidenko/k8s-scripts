@@ -1,0 +1,18 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: iperf-server
+  #annotations:
+  #  metallb.universe.tf/ip-allocated-from-pool: external
+  labels:
+    app: iperf-server
+spec:
+  ports:
+    - protocol: TCP
+      port: 5201
+      targetPort: 5201
+  selector:
+    app: iperf-server
+  type: LoadBalancer
+
