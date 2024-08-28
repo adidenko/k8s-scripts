@@ -7,6 +7,8 @@ RUN apk add fio iozone hdparm bash screen lshw inotify-tools iotop curl \
     && apk add iptables bind-tools \
     && apk cache purge
 
+COPY files/ /files/
+
 WORKDIR /root
 
 ENTRYPOINT [ "/bin/bash" ]

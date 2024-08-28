@@ -1,0 +1,17 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: echo-dep
+  labels:
+    app: echo-dep
+    app.kubernetes.io/lb: external-2
+spec:
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  selector:
+    app: echo-dep
+  type: LoadBalancer
+
