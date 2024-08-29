@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: vault-client
+  labels:
+    app: vault-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vault-client
+  serviceName: vault-client
+  template:
+    metadata:
+      labels:
+        app: vault-client
+    spec:
+      containers:
+      - name: vault-client
+        image: hashicorp/vault:1.17
+        args:
+          - -c
+          - "trap : TERM INT; sleep infinity & wait"
+        command:
+          - /bin/sh
+        resources:
+          requests:
+            cpu: 10m
+            memory: 64Mi
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+      dnsConfig:
+        options:
+        - name: ndots
+          value: "1"
+      tolerations:
+        - key: kubernetes.io/arch
+          operator: Equal
+          value: arm64
+          effect: NoSchedule
+
