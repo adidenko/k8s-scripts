@@ -34,3 +34,8 @@ spec:
         options:
         - name: ndots
           value: "1"
+      tolerations:
+        - key: kubernetes.io/arch
+          operator: Equal
+          value: arm64
+          effect: NoSchedule
