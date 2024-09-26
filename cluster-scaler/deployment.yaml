@@ -1,0 +1,45 @@
+# Deployment to scale node-pools.
+# Number of nodes will be equal to number of replicas
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cluster-scaler
+  labels:
+    app: cluster-scaler
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cluster-scaler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 0
+  template:
+    metadata:
+      labels:
+        app: cluster-scaler
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                    - cluster-scaler
+              topologyKey: "kubernetes.io/hostname"
+      containers:
+      - name: cluster-scaler
+        image: gcr.io/google_containers/echoserver:1.10
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            cpu: 50m
+            memory: 64Mi
+      nodeSelector: {}
+      tolerations: []
