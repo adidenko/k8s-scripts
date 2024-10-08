@@ -14,7 +14,6 @@ spec:
     metadata:
       labels:
         app: echo-dep
-        alerts: ignore
     spec:
       containers:
       - name: echoserver
