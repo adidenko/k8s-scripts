@@ -1,0 +1,26 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: grpc-hello
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-dns01
+    haproxy-ingress.github.io/backend-protocol: h2
+    haproxy-ingress.github.io/tls-alpn: h2,http/1.1
+    haproxy-ingress.github.io/use-htx: "true"
+spec:
+  rules:
+  - host: grpc-hello.api.stage.icn.global
+    http:
+      paths:
+      - backend:
+          service:
+            name: grpc-hello
+            port:
+              number: 50051
+        path: /
+        pathType: Prefix
+  tls:
+  - secretName: grpc-hello-tls
+    hosts:
+      - grpc-hello.api.stage.icn.global

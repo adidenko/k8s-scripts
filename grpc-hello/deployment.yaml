@@ -1,0 +1,22 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grpc-hello
+  labels:
+    app: grpc-hello
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grpc-hello
+  template:
+    metadata:
+      labels:
+        app: grpc-hello
+    spec:
+      containers:
+      - name: grpc-hello
+        image: adgit/grpc-hello:20241009-v1
+        ports:
+          - containerPort: 50051
