@@ -37,9 +37,10 @@ const (
 )
 
 var (
-	addr      = flag.String("addr", "localhost:50051", "the address to connect to")
-	name      = flag.String("name", defaultName, "Name to greet")
-	plaintext = flag.Bool("insecure", false, "Do not use TLS")
+	addr       = flag.String("addr", "localhost:50051", "the address to connect to")
+	name       = flag.String("name", defaultName, "Name to greet")
+	plaintext  = flag.Bool("insecure", false, "Do not use TLS")
+	skipVerify = flag.Bool("tls-skip-verify", false, "Skip TLS certificate verification")
 )
 
 func main() {
@@ -51,7 +52,7 @@ func main() {
 	if *plaintext {
 		conn, err = grpc.NewClient(*addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	} else {
-		creds := credentials.NewTLS(&tls.Config{InsecureSkipVerify: false})
+		creds := credentials.NewTLS(&tls.Config{InsecureSkipVerify: *skipVerify})
 		conn, err = grpc.NewClient(*addr, grpc.WithTransportCredentials(creds))
 	}
 	if err != nil {

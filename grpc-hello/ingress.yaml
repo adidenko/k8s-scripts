@@ -4,13 +4,14 @@ kind: Ingress
 metadata:
   name: grpc-hello
   annotations:
+    external-dns.alpha.kubernetes.io/target: BASE_DOMAIN
     cert-manager.io/cluster-issuer: letsencrypt-dns01
     haproxy-ingress.github.io/backend-protocol: h2
     haproxy-ingress.github.io/tls-alpn: h2,http/1.1
     haproxy-ingress.github.io/use-htx: "true"
 spec:
   rules:
-  - host: grpc-hello.api.stage.icn.global
+  - host: grpc-hello.BASE_DOMAIN
     http:
       paths:
       - backend:
@@ -23,4 +24,4 @@ spec:
   tls:
   - secretName: grpc-hello-tls
     hosts:
-      - grpc-hello.api.stage.icn.global
+      - grpc-hello.BASE_DOMAIN

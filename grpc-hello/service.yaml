@@ -3,9 +3,6 @@ kind: Service
 apiVersion: v1
 metadata:
   name: grpc-hello
-  annotations:
-    external-dns.alpha.kubernetes.io/hostname: grpc-hello.api.stage.icn.global
-    external-dns.alpha.kubernetes.io/target: api.stage.icn.global
   labels:
     app: grpc-hello
 spec:
