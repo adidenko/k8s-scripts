@@ -1,8 +1,8 @@
 {{ $allFolders := list }}
 {{ range $path, $_ :=  .Files.Glob  "files/dashboards/**.json" }}
 {{- $d := split "/" (dir $path) }}
-{{- $folderTitle := $d._3 }}
-{{- $folder := $d._3 | lower }}
+{{- $folderTitle := $d._2 }}
+{{- $folder := $d._2 | lower }}
 {{- if not (has $folder $allFolders) }}
 {{- $allFolders = append $allFolders $folder }}
 ---
