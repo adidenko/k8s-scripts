@@ -12,7 +12,7 @@ metadata:
   name: {{ $folder }}
 spec:
   title: {{ $folderTitle }}
-  parentFolderRef: production-core
+  parentFolderRef: main-folder
   instanceSelector:
     matchLabels:
       grafana-instance: "default"
@@ -31,4 +31,4 @@ spec:
       grafana-instance: "default"
   json: >
     {{- $.Files.Get $path | nindent 4 }}
-{{ end }}
+{{- end }}
