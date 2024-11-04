@@ -14,7 +14,7 @@ metadata:
 spec:
   title: {{ $folderTitle }}
   {{- if gt $id 0 }}
-  parentFolderRef: {{ index $d (sub $id 1) }}
+  parentFolderRef: {{ index $d (sub $id 1) | lower }}
   {{- end }}
   instanceSelector:
     matchLabels:
