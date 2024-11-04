@@ -1,0 +1,24 @@
+{{- $allFolders := list }}
+{{- range $path, $_ :=  .Files.Glob  "files/dashboards/**.json" }}
+{{- $d := splitList "/" (trimPrefix "files/dashboards/" (dir $path)) }}
+{{- range $id, $f := $d }}
+{{- $folderTitle := $f }}
+{{- $folder := $folderTitle | lower }}
+{{- if not (has $folder $allFolders) }}
+{{- $allFolders = append $allFolders $folder }}
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaFolder
+metadata:
+  name: {{ $folder }}
+spec:
+  title: {{ $folderTitle }}
+  {{- if gt $id 0 }}
+  parentFolderRef: {{ index $d (sub $id 1) }}
+  {{- end }}
+  instanceSelector:
+    matchLabels:
+      grafana-instance: "default"
+{{- end }}
+{{- end }}
+{{- end }}
