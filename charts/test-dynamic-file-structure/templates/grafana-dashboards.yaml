@@ -22,7 +22,6 @@ apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
 metadata:
   name: {{ $path }}
-  namespace: {{ $.Release.Namespace }}
 spec:
   folderRef: {{ $folder }}
   resyncPeriod: 60s
