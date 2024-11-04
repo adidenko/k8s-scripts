@@ -1,0 +1,34 @@
+{{ $allFolders := list }}
+{{ range $path, $_ :=  .Files.Glob  "files/dashboards/**.json" }}
+{{- $d := split "/" (dir $path) }}
+{{- $folderTitle := $d._3 }}
+{{- $folder := $d._3 | lower }}
+{{- if not (has $folder $allFolders) }}
+{{- $allFolders = append $allFolders $folder }}
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaFolder
+metadata:
+  name: {{ $folder }}
+spec:
+  title: {{ $folderTitle }}
+  parentFolderRef: production-core
+  instanceSelector:
+    matchLabels:
+      grafana-instance: "default"
+{{- end }}
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: {{ $path }}
+  namespace: {{ $.Release.Namespace }}
+spec:
+  folderRef: {{ $folder }}
+  resyncPeriod: 60s
+  instanceSelector:
+    matchLabels:
+      grafana-instance: "default"
+  json: >
+    {{- $.Files.Get $path | nindent 4 }}
+{{ end }}
