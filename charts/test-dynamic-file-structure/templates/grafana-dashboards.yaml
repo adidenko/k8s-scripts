@@ -3,6 +3,7 @@
 {{- $d := split "/" (dir $path) }}
 {{- $folderTitle := $d._2 }}
 {{- $folder := $d._2 | lower }}
+{{- $dashboard := trimSuffix (ext $path) (base $path) }}
 {{- if not (has $folder $allFolders) }}
 {{- $allFolders = append $allFolders $folder }}
 ---
@@ -21,7 +22,7 @@ spec:
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
 metadata:
-  name: {{ $path }}
+  name: {{ $dashboard }}
 spec:
   folderRef: {{ $folder }}
   resyncPeriod: 60s
