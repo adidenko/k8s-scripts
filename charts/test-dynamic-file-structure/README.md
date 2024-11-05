@@ -39,7 +39,7 @@ spec:
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaFolder
 metadata:
-  name: core
+  name: production-core
 spec:
   title: Core
   parentFolderRef: production
@@ -51,10 +51,10 @@ spec:
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaFolder
 metadata:
-  name: folderone
+  name: production-core-folderone
 spec:
   title: FolderOne
-  parentFolderRef: core
+  parentFolderRef: production-core
   instanceSelector:
     matchLabels:
       grafana-instance: "default"
@@ -63,10 +63,10 @@ spec:
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaFolder
 metadata:
-  name: foldertwo
+  name: production-core-foldertwo
 spec:
   title: FolderTwo
-  parentFolderRef: core
+  parentFolderRef: production-core
   instanceSelector:
     matchLabels:
       grafana-instance: "default"
@@ -75,7 +75,7 @@ spec:
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaFolder
 metadata:
-  name: services
+  name: production-services
 spec:
   title: Services
   parentFolderRef: production
@@ -87,10 +87,10 @@ spec:
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaFolder
 metadata:
-  name: folderthree
+  name: production-services-folderthree
 spec:
   title: FolderThree
-  parentFolderRef: services
+  parentFolderRef: production-services
   instanceSelector:
     matchLabels:
       grafana-instance: "default"
@@ -106,7 +106,7 @@ kind: GrafanaDashboard
 metadata:
   name: one-one
 spec:
-  folderRef: folderone
+  folderRef: production-core-folderone
   resyncPeriod: 60s
   instanceSelector:
     matchLabels:
@@ -117,7 +117,6 @@ spec:
       "foo": "bar",
       "name": "something"
     }
-
 ---
 # Source: test-dynamic-file-structure/templates/grafana-dashboards.yaml
 apiVersion: grafana.integreatly.org/v1beta1
@@ -125,7 +124,7 @@ kind: GrafanaDashboard
 metadata:
   name: one-two
 spec:
-  folderRef: folderone
+  folderRef: production-core-folderone
   resyncPeriod: 60s
   instanceSelector:
     matchLabels:
@@ -136,7 +135,6 @@ spec:
       "foo": "bar",
       "name": "something"
     }
-
 ---
 # Source: test-dynamic-file-structure/templates/grafana-dashboards.yaml
 apiVersion: grafana.integreatly.org/v1beta1
@@ -144,7 +142,7 @@ kind: GrafanaDashboard
 metadata:
   name: two-one
 spec:
-  folderRef: foldertwo
+  folderRef: production-core-foldertwo
   resyncPeriod: 60s
   instanceSelector:
     matchLabels:
@@ -155,7 +153,6 @@ spec:
       "foo": "bar",
       "name": "something"
     }
-
 ---
 # Source: test-dynamic-file-structure/templates/grafana-dashboards.yaml
 apiVersion: grafana.integreatly.org/v1beta1
@@ -163,7 +160,7 @@ kind: GrafanaDashboard
 metadata:
   name: three-one
 spec:
-  folderRef: folderthree
+  folderRef: production-services-folderthree
   resyncPeriod: 60s
   instanceSelector:
     matchLabels:
@@ -174,7 +171,6 @@ spec:
       "foo": "bar",
       "name": "something"
     }
-
 ---
 # Source: test-dynamic-file-structure/templates/grafana-dashboards.yaml
 apiVersion: grafana.integreatly.org/v1beta1
@@ -182,7 +178,7 @@ kind: GrafanaDashboard
 metadata:
   name: three-two
 spec:
-  folderRef: folderthree
+  folderRef: production-services-folderthree
   resyncPeriod: 60s
   instanceSelector:
     matchLabels:
@@ -193,5 +189,4 @@ spec:
       "foo": "bar",
       "name": "something"
     }
-
 ```

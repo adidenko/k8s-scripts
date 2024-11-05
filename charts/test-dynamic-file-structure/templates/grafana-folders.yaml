@@ -2,9 +2,16 @@
 {{- range $path, $_ :=  .Files.Glob  "files/dashboards/**.json" }}
 {{- $d := splitList "/" (trimPrefix "files/dashboards/" (dir $path)) }}
 
+{{- $curPath := list }}
+{{- $prevPath := list }}
+
 {{- range $id, $f := $d }}
+
+{{- $prevPath = $curPath }}
+{{- $curPath = append $curPath $f }}
+
 {{- $folderTitle := $f }}
-{{- $folder := join "-" $d | lower }}
+{{- $folder := join "-" $curPath | lower }}
 
 {{- if not (has $folder $allFolders) }}
 {{- $allFolders = append $allFolders $folder }}
@@ -16,7 +23,7 @@ metadata:
 spec:
   title: {{ $folderTitle }}
   {{- if gt $id 0 }}
-  parentFolderRef: {{ index $d (sub $id 1) | lower }}
+  parentFolderRef: {{ join "-" $prevPath | lower  }}
   {{- end }}
   instanceSelector:
     matchLabels:
