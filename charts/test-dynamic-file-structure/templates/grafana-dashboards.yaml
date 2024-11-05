@@ -1,9 +1,6 @@
 {{- range $path, $_ :=  .Files.Glob  "files/dashboards/**.json" }}
-{{- $d := splitList "/" (dir $path) }}
-
-{{- $folderTitle := index $d (sub (len $d) 1) }}
-{{- $folder := $folderTitle | lower }}
-
+{{- $d := splitList "/" (trimPrefix "files/dashboards/" (dir $path)) }}
+{{- $folder := join "-" $d | lower }}
 {{- $dashboard := trimSuffix (ext $path) (base $path) }}
 ---
 apiVersion: grafana.integreatly.org/v1beta1
