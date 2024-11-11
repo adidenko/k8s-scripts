@@ -13,7 +13,6 @@
 
 {{- $allDashboards = append $allDashboards $dashboard }}
 {{- $spec := deepCopy $defaults | merge (get $overrides $dashboard | default dict) }}
-
 ---
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
