@@ -1,4 +1,7 @@
 {{- $allFolders := list }}
+{{- $defaults := .Values.grafanaFolders.defaults }}
+{{- $overrides := .Values.grafanaFolders.overrides }}
+
 {{- range $path, $_ :=  .Files.Glob  "files/dashboards/**.json" }}
 {{- $d := splitList "/" (trimPrefix "files/dashboards/" (dir $path)) }}
 
@@ -15,6 +18,8 @@
 
 {{- if not (has $folder $allFolders) }}
 {{- $allFolders = append $allFolders $folder }}
+
+{{- $spec := deepCopy $defaults | merge (get $overrides $folder | default dict) }}
 ---
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaFolder
@@ -25,9 +30,9 @@ spec:
   {{- if gt $id 0 }}
   parentFolderRef: {{ join "-" $prevPath | lower  }}
   {{- end }}
-  instanceSelector:
-    matchLabels:
-      grafana-instance: "default"
+  {{- with $spec}}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
 {{- end }}
 {{- end }}
 {{- end }}

@@ -1,7 +1,13 @@
+{{- $defaults := .Values.grafanaDashboards.defaults }}
+{{- $overrides := .Values.grafanaDashboards.overrides }}
+
 {{- range $path, $_ :=  .Files.Glob  "files/dashboards/**.json" }}
 {{- $d := splitList "/" (trimPrefix "files/dashboards/" (dir $path)) }}
 {{- $folder := join "-" $d | lower }}
-{{- $dashboard := trimSuffix (ext $path) (base $path) }}
+{{- $dashboard := trimSuffix (ext $path) (base $path) | lower }}
+
+{{- $spec := deepCopy $defaults | merge (get $overrides $dashboard | default dict) }}
+
 ---
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
@@ -9,10 +15,9 @@ metadata:
   name: {{ $dashboard }}
 spec:
   folderRef: {{ $folder }}
-  resyncPeriod: 60s
-  instanceSelector:
-    matchLabels:
-      grafana-instance: "default"
+  {{- with $spec}}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
   json: >
     {{- $.Files.Get $path | nindent 4 }}
 {{- end }}
