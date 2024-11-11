@@ -1,5 +1,5 @@
-{{- $defaults := .Values.grafanaDashboards.defaults }}
-{{- $overrides := .Values.grafanaDashboards.overrides }}
+{{- $defaults := .Values.grafanaDashboards.specDefaults }}
+{{- $overrides := .Values.grafanaDashboards.specOverrides }}
 
 {{- range $path, $_ :=  .Files.Glob  "files/dashboards/**.json" }}
 {{- $d := splitList "/" (trimPrefix "files/dashboards/" (dir $path)) }}

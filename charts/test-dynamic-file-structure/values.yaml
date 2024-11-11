@@ -6,14 +6,14 @@
 grafanaDashboards:
 
   # Default spec to be applied to all GrafanaDashboard resources
-  defaults:
+  specDefaults:
     resyncPeriod: 60s
     instanceSelector:
       matchLabels:
         grafana-instance: "default"
 
   # Customization via overrides (deep merge)
-  overrides:
+  specOverrides:
     # Custom resync period for dashboard with name "three-one"
     three-one:
       resyncPeriod: 90s
@@ -22,13 +22,13 @@ grafanaDashboards:
 grafanaFolders:
 
   # Default spec to be applied to all GrafanaFolders resources
-  defaults:
+  specDefaults:
     instanceSelector:
       matchLabels:
         grafana-instance: "default"
 
   # Customization via overrides (deep merge)
-  overrides:
+  specOverrides:
     # Custom permissions for folder named "production-services-folderthree"
     production-services-folderthree:
       permissions: |
