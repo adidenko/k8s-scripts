@@ -1,3 +1,4 @@
+{{- $allDashboards := list }}
 {{- $defaults := .Values.grafanaDashboards.specDefaults }}
 {{- $overrides := .Values.grafanaDashboards.specOverrides }}
 
@@ -6,6 +7,11 @@
 {{- $folder := join "-" $d | lower }}
 {{- $dashboard := trimSuffix (ext $path) (base $path) | lower }}
 
+{{- if has $dashboard $allDashboards }}
+{{- fail (printf "GrafanaDashboard names must be unique. Found duplication for name %q" $dashboard) }}
+{{- end }}
+
+{{- $allDashboards = append $allDashboards $dashboard }}
 {{- $spec := deepCopy $defaults | merge (get $overrides $dashboard | default dict) }}
 
 ---
