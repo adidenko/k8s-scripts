@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: dbox-pvc
+  labels:
+    app: dbox-pvc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dbox-pvc
+  serviceName: dbox-pvc
+  template:
+    metadata:
+      labels:
+        app: dbox-pvc
+    spec:
+      containers:
+      - name: dbox-pvc
+        image: adgit/debug:20241023-v1
+        args:
+        - -c
+        - "trap : TERM INT; sleep infinity & wait"
+        command:
+          - /bin/sh
+        resources:
+          requests:
+            cpu: 10m
+            memory: 64Mi
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+        volumeMounts:
+          - name: data
+            mountPath: /data
+      dnsConfig:
+        options:
+        - name: ndots
+          value: "1"
+      tolerations:
+        - key: kubernetes.io/arch
+          operator: Equal
+          value: arm64
+          effect: NoSchedule
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
