@@ -1,10 +1,20 @@
 {{- $allFolders := list }}
+{{- $allPaths := list }}
 {{- $defaults := .Values.grafanaFolders.specDefaults }}
 {{- $overrides := .Values.grafanaFolders.specOverrides }}
 
-{{- range $path, $_ :=  .Files.Glob  "files/dashboards/**.json" }}
-{{- $d := splitList "/" (trimPrefix "files/dashboards/" (dir $path)) }}
+{{- range $path, $_ := .Files.Glob "files/dashboards/**.json" }}
+{{- $p := trimPrefix "files/dashboards/" (dir $path) }}
+{{- $allPaths = append $allPaths $p }}
+{{- end }}
 
+{{- range $path, $_ := .Files.Glob "files/resources/**/alertrules/*.yaml" }}
+{{- $p := trimPrefix "files/resources/" (dir $path) }}
+{{- $allPaths = append $allPaths $p }}
+{{- end }}
+
+{{- range $_, $path := $allPaths }}
+{{- $d := splitList "/" $path }}
 {{- $curPath := list }}
 {{- $prevPath := list }}
 
