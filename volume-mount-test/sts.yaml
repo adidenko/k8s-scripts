@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: cm-test
+spec:
+  selector:
+    matchLabels:
+      app: cm-test
+  serviceName: cm-test
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: cm-test
+    spec:
+      containers:
+      - name: dbox
+        image: adgit/debug:20250204-v1
+        args:
+        - -c
+        - "trap : TERM INT; sleep infinity & wait"
+        command:
+          - /bin/sh
+        resources:
+          requests:
+            cpu: 10m
+            memory: 64Mi
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/cm
+        - name: secret-volume
+          mountPath: /app/secret
+          readOnly: true
+      volumes:
+      - name: config-volume
+        configMap:
+          name: cm-test
+      - name: secret-volume
+        secret:
+          secretName: secret-test

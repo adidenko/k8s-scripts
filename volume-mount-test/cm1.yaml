@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cm-test
+data:
+  test.txt: |
+    Data: v1
+    This is a test file for the ConfigMap.
