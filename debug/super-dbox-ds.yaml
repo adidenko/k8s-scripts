@@ -43,6 +43,8 @@ spec:
           mountPropagation: Bidirectional
         - mountPath: /var/run
           name: var-run
+        - mountPath: /ttt
+          name: ttt
       dnsConfig:
         options:
         - name: ndots
@@ -64,3 +66,7 @@ spec:
           path: /var/run
           type: Directory
         name: var-run
+      - hostPath:
+          path: /var
+          type: Directory
+        name: ttt
