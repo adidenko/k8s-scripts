@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: argocd-cli
+  labels:
+    app: argocd-cli
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: argocd-cli
+  serviceName: argocd-cli
+  template:
+    metadata:
+      labels:
+        app: argocd-cli
+    spec:
+      containers:
+      - name: argocd-cli
+        image: quay.io/argoproj/argocd:v3.0.6
+        args:
+        - -c
+        - |
+          echo "Generating ArgoCD CLI configuration..."
+          argocd login $ARGOCD_SERVER --password $PASSWORD --insecure --username admin
+          echo "Sleeping forever to keep the pod running..."
+          trap : TERM INT; sleep infinity & wait
+        command:
+          - /bin/bash
+        env:
+        - name: ARGOCD_SERVER
+          value: argocd-server
+        - name: PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: argocd-initial-admin-secret
+              key: password
+        resources:
+          requests:
+            cpu: 10m
+            memory: 64Mi
+          limits:
+            cpu: 2000m
+            memory: 2Gi
