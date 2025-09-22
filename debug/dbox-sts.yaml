@@ -15,6 +15,8 @@ spec:
       labels:
         app: dbox
     spec:
+      #nodeSelector:
+      #  kubernetes.io/hostname: some-node
       containers:
       - name: dbox
         image: adgit/debug:20250204-v1
@@ -30,10 +32,7 @@ spec:
           limits:
             cpu: 1000m
             memory: 1Gi
-      dnsConfig:
-        options:
-        - name: ndots
-          value: "1"
+      dnsPolicy: Default
       tolerations:
         - key: kubernetes.io/arch
           operator: Equal

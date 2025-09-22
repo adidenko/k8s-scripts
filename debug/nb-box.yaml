@@ -22,7 +22,7 @@ spec:
       #  kubernetes.io/hostname: gke-infra-mgmt-4a56a4-t2a-standard-4-864584c5-ccmr
       containers:
       - name: dbox
-        image: adgit/debug:20240618-v1
+        image: adgit/debug:20250204-v1
         args:
         - -c
         - "trap : TERM INT; sleep infinity & wait"
