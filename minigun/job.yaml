@@ -1,0 +1,30 @@
+# Kubernetes Job Configuration with resource limits called minigun,
+# which runs a load test against a specified URL.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: minigun
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: minigun
+        image: ghcr.io/wayfair-incubator/minigun:v0.6.1
+        args:
+          - -fire-target
+          - "https://kubernetes.default.svc/version"
+          - -fire-duration
+          - "1m"
+          - -fire-rate
+          - "100"
+          - -workers
+          - "64"
+          - -disable-keep-alive
+          - -insecure
+        resources:
+          limits:
+            memory: "8Gi"
+          requests:
+            cpu: "1"
+            memory: "1Gi"
