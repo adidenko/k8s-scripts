@@ -19,7 +19,7 @@ spec:
       #  kubernetes.io/hostname: some-node
       containers:
       - name: dbox
-        image: adgit/debug:20250204-v1
+        image: adgit/debug:20260105-v1
         args:
         - -c
         - "trap : TERM INT; sleep infinity & wait"
@@ -32,7 +32,6 @@ spec:
           limits:
             cpu: 1000m
             memory: 1Gi
-      dnsPolicy: Default
       tolerations:
         - key: kubernetes.io/arch
           operator: Equal
