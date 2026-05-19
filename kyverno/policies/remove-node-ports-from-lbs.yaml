@@ -1,0 +1,60 @@
+---
+# Allow system:serviceaccount:kyverno:kyverno-background-controller to edit services to remove nodePorts
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kyverno-background-controller-edit-services
+rules:
+  - apiGroups: [""]
+    resources: ["services"]
+    verbs: ["get", "list", "watch", "update", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kyverno-background-controller-edit-services
+subjects:
+  - kind: ServiceAccount
+    name: kyverno-background-controller
+    namespace: kyverno
+roleRef:
+  kind: ClusterRole
+  name: kyverno-background-controller-edit-services
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: remove-service-nodeports
+  annotations:
+    policies.kyverno.io/title: Remove NodePorts from Services
+    policies.kyverno.io/category: Networking
+    policies.kyverno.io/description: >-
+      Removes the nodePort field from any Service port definitions to prevent
+      unintended host port exposures, converting them back to standard cluster assignments.
+spec:
+  # Mutate existing Services in the cluster in the background
+  mutateExistingOnPolicyUpdate: true
+  rules:
+    - name: remove-nodeport-fields
+      match:
+        any:
+          - resources:
+              kinds:
+                - Service
+      # Precondition ensures this rule only applies to LoadBalancer types
+      preconditions:
+        all:
+          - key: "{{ request.object.spec.type }}"
+            operator: Equals
+            value: LoadBalancer
+      # Targets block allows the background controller to find and fix existing resources
+      mutate:
+        targets:
+          - apiVersion: v1
+            kind: Service
+        foreach:
+          - list: "request.object.spec.ports"
+            patchesJson6902: |-
+              - op: remove
+                path: /spec/ports/{{elementIndex}}/nodePort
